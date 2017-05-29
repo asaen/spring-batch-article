@@ -142,7 +142,7 @@ public class CustomerReportJobConfig {
     @StepScope
     @Bean
     public TransactionValidatingProcessor transactionValidatingProcessor() {
-        return new TransactionValidatingProcessor(30);
+        return new TransactionValidatingProcessor(5);
     }
 
     @StepScope
