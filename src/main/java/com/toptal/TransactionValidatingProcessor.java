@@ -38,7 +38,7 @@ public class TransactionValidatingProcessor extends ValidatingItemProcessor<Cust
         super(
             item -> {
                 if (item.getTransactions() >= limit) {
-                    throw new ValidationException("Customer has less than " + limit + " transactions");
+                    throw new ValidationException("Customer has more than " + limit + " transactions");
                 }
                 log.info("Customer {} matched the transaction filter", item);
             }
