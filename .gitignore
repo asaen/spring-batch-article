@@ -13,5 +13,5 @@ hs_err_pid*
 
 # maven
 target/
-database.xml
-output.txt
+data/
+*.log

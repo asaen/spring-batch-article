@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 Alexey Saenko
+ * Copyright (c) 2017-2026 Alexey Saenko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,11 @@
  */
 package com.toptal;
 
-import java.io.Serializable;
-import java.util.Calendar;
-import lombok.Data;
+import java.time.LocalDate;
 
 /**
  * Data class.
  *
  * @author Alexey Saenko (alexey.saenko@gmail.com)
  */
-@Data
-public class Customer implements Serializable {
-
-    private int id;
-    private String name;
-    private Calendar birthday;
-    private int transactions;
-
-    @Override
-    public String toString() {
-        return String.format(
-            "#%s, %s born on %3$tb %3$te, %3$tY, finished %4$s transactions",
-            id,
-            name,
-            birthday.getTime(),
-            transactions
-        );
-    }
-
-}
+public record Customer(long id, String name, LocalDate birthday, int transactions) { }

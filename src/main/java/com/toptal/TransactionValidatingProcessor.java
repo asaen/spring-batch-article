@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 Alexey Saenko
+ * Copyright (c) 2017-2026 Alexey Saenko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,21 @@
  */
 package com.toptal;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.validator.ValidatingItemProcessor;
-import org.springframework.batch.item.validator.ValidationException;
+import org.springframework.batch.infrastructure.item.validator.ValidatingItemProcessor;
+import org.springframework.batch.infrastructure.item.validator.ValidationException;
 
 /**
  * Processor filters customers by the amount of transactions.
  *
  * @author Alexey Saenko (alexey.saenko@gmail.com)
  */
-@Slf4j
 public class TransactionValidatingProcessor extends ValidatingItemProcessor<Customer> {
-    public TransactionValidatingProcessor(final int limit) {
-        super(
-            item -> {
-                if (item.getTransactions() >= limit) {
-                    throw new ValidationException("Customer has more than " + limit + " transactions");
-                }
-                log.info("Customer {} matched the transaction filter", item);
+    public TransactionValidatingProcessor(int limit) {
+        super(customer -> {
+            if (customer.transactions() >= limit) {
+                throw new ValidationException("Customer has at least " + limit + " transactions");
             }
-        );
+        });
         setFilter(true);
     }
 }

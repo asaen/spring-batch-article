@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 Alexey Saenko
+ * Copyright (c) 2017-2026 Alexey Saenko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,43 +23,13 @@
  */
 package com.toptal;
 
-import java.beans.XMLDecoder;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.support.IteratorItemReader;
-
 /**
- * Customer item reader.
+ * Customer record with invalid business data.
  *
  * @author Alexey Saenko (alexey.saenko@gmail.com)
  */
-@Slf4j
-public class CustomerItemReader implements ItemReader<Customer> {
-
-    private final String filename;
-
-    private ItemReader<Customer> delegate;
-
-    public CustomerItemReader(final String filename) {
-        this.filename = filename;
-    }
-
-    @Override
-    public Customer read() throws Exception {
-        if (delegate == null) {
-            log.info("Creating iterator item reader");
-            delegate = new IteratorItemReader<>(customers());
-        }
-        log.info("Reading next customer");
-        return delegate.read();
-    }
-
-    private List<Customer> customers() throws FileNotFoundException {
-        try (XMLDecoder decoder = new XMLDecoder(new FileInputStream(filename))) {
-            return (List<Customer>) decoder.readObject();
-        }
+public class InvalidCustomerException extends RuntimeException {
+    public InvalidCustomerException(String message) {
+        super(message);
     }
 }

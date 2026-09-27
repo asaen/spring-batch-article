@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 Alexey Saenko
+ * Copyright (c) 2017-2026 Alexey Saenko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,28 @@
  */
 package com.toptal;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.item.ItemProcessor;
+import java.time.LocalDate;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 
 /**
- * Processor filters customers by being born in the actual month.
+ * Processor filters customers by being born in the month of the report date.
  *
  * @author Alexey Saenko (alexey.saenko@gmail.com)
  */
-@Slf4j
 public class BirthdayFilterProcessor implements ItemProcessor<Customer, Customer> {
+    private final LocalDate reportDate;
+
+    public BirthdayFilterProcessor(LocalDate reportDate) {
+        this.reportDate = reportDate;
+    }
+
     @Override
-    public Customer process(final Customer item) throws Exception {
-        if (new GregorianCalendar().get(Calendar.MONTH) == item.getBirthday().get(Calendar.MONTH)) {
-            log.info("Customer {} matched the birthday filter", item);
-            return item;
+    public Customer process(Customer customer) {
+        if (customer.id() <= 0 || customer.name().isBlank()
+                || customer.transactions() < 0) {
+            throw new InvalidCustomerException("Invalid customer: " + customer.id());
         }
-        return null;
+        return customer.birthday().getMonth() == reportDate.getMonth()
+                ? customer : null;
     }
 }
